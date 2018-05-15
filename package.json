@@ -1,6 +1,6 @@
 {
   "name": "clwhy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A teeny tiny CLI framework.",
   "main": "clwhy.js",
   "author": "Joel Terry",
