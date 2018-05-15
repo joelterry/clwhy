@@ -4,5 +4,6 @@
   "description": "A teeny tiny CLI framework.",
   "main": "clwhy.js",
   "author": "Joel Terry",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": "github:joelterry/clwhy"
 }
