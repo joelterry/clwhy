@@ -1,12 +1,10 @@
 function stdin() {
-    if (process.stdin.isTTY) {
-        return Promise.resolve(null);
-    }
-    return new Promise(function(resolve, reject) {
+    return process.stdin.isTTY ? Promise.resolve(null) :
+    new Promise(function(resolve, reject) {
         var inputChunks = [];
         process.stdin.setEncoding('utf8');
         process.stdin.on('readable', () => {
-            const chunk = process.stdin.read();
+            var chunk = process.stdin.read();
             if (chunk !== null) {
                 inputChunks.push(chunk);
             }
@@ -22,10 +20,14 @@ function stdin() {
     });
 }
 
-module.exports = function(funcMap) {
-    if (process.argv.length < 3 || !module.parent) {
-        return;
-    }
+process.on('beforeExit', () => {
+    if (!module.parent) return;
+    if (process.argv.length < 3) return process.stdout.write(
+        Object.entries(module.parent.exports)
+        .filter(([k, v]) => typeof(v) === "function")
+        .map(([k, v]) => `${k} () { node ${module.parent.filename} ${k} "$@"; };`)
+        .join("\n") + "\n"
+    );
     var name = process.argv[2] || "";
     var func = module.parent.exports[name];
     var args = process.argv.slice(3);
@@ -36,9 +38,9 @@ module.exports = function(funcMap) {
     stdin()
     .then(input => func.apply(null, [input].concat(args)))
     .then(output => typeof(output) === "object" ? JSON.stringify(output, null, 2) : String(output))
-    .then(outputString => {process.stdout.write(outputString)})
+    .then(outputString => process.stdout.write(outputString))
     .catch(err => {
         console.error(err);
         process.exit(1);
     });
-}
+});

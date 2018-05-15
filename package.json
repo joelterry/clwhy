@@ -1,11 +1,8 @@
 {
   "name": "clwhy",
   "version": "1.0.0",
-  "description": "A minimal (< 50 lines, 0 dependencies, no API) CLI tool.",
+  "description": "A teeny tiny CLI framework.",
   "main": "clwhy.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Joel Terry",
-  "license": "ISC"
+  "license": "MIT"
 }
