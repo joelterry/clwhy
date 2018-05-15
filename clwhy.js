@@ -20,14 +20,17 @@ function stdin() {
     });
 }
 
+var ran = false;
+
 process.on('beforeExit', () => {
-    if (!module.parent) return;
+    if (ran || !module.parent) return;
     if (process.argv.length < 3) return process.stdout.write(
         Object.entries(module.parent.exports)
         .filter(([k, v]) => typeof(v) === "function")
         .map(([k, v]) => `${k} () { node ${module.parent.filename} ${k} "$@"; };`)
         .join("\n") + "\n"
     );
+    ran = true;
     var name = process.argv[2] || "";
     var func = module.parent.exports[name];
     var args = process.argv.slice(3);
